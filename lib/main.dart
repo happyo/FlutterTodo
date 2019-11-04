@@ -42,6 +42,7 @@ class TutorialHome extends StatelessWidget {
       // body is the majority of the screen.
       body: Container(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
           bar,
           Container(
@@ -50,8 +51,13 @@ class TutorialHome extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 userSection,
-                haha,
-              ],),)
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                  child: Text("data"),
+                ),
+              ],),
+          ),
+          haha,
       ],),)
     );
   }

@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:todo/main.dart';
 
 class CardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 380.0,
-      child: ListView(
+      height: 450.0,
+      // margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
+      child: PageView(
         scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          Container(width: 250, color: Colors.yellow,
-            child: TaskCard(), 
+        controller: PageController(
+            initialPage: 1,
+            viewportFraction: 0.8,
           ),
+        children: <Widget>[
+          TaskCard(), 
+          TaskCard(),
+          TaskCard(),
         ],
     ),);
-  }
-}
-
-class CardPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return PageView(controller: PageController(),);
   }
 }
 
@@ -29,6 +28,7 @@ class TaskCard extends StatelessWidget {
     return SizedBox(
       // height: 200,
       child: Card(
+        margin: EdgeInsets.all(10),
         child: Container(
           // ba
           margin: EdgeInsets.all(15),
@@ -55,14 +55,34 @@ class TaskCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Image.asset("images/more.png", height: 16, width: 16,),
+                Container(
+                  alignment: Alignment.topRight,
+                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Image.asset("images/more.png", height: 16, width: 16,),
+                ),
               ],),
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("data"),
-                  Text("data"),
-                  LinearProgressIndicator(),
+                  Text("9 Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
+                  Text("Personal", style: TextStyle(color: Colors.black, fontSize: 50),),
+                  Container(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(child: SizedBox(
+                          height: 2,
+                          child: LinearProgressIndicator(
+                            backgroundColor: hexToColor("#EEEEEE"),
+                            valueColor: AlwaysStoppedAnimation<Color>(hexToColor("#F77B67")),
+                            value: 0.8,
+                          ),
+                        ),),
+                        SizedBox(width: 10),
+                        Text("80%", style: TextStyle(color: hexToColor("#666666"), fontSize: 10,),),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ],
