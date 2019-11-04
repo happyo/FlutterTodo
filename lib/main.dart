@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'Card.dart';
 import 'UserInfo.dart';
@@ -53,7 +54,7 @@ class TutorialHome extends StatelessWidget {
                 userSection,
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
-                  child: Text("data"),
+                  child: Text(DateFormat().add_yMMMd().format(DateTime.now()), style: TextStyle(color: hexToColor("#FFFFFF"), fontSize: 15,),),
                 ),
               ],),
           ),

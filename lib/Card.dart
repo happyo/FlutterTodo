@@ -66,7 +66,9 @@ class TaskCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text("9 Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
+                  SizedBox(height: 5,),
                   Text("Personal", style: TextStyle(color: Colors.black, fontSize: 50),),
+                  SizedBox(height: 10,),
                   Container(
                     child: Row(
                       children: <Widget>[
