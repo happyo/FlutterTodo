@@ -1,3 +1,4 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -10,6 +11,19 @@ void main() {
     // home: TutorialHome(),
     home: TutorialHome(),
   ));
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final IncrementBloc bloc = BlocProvider.of<IncrementBloc>(context);
+    
+    return MaterialApp(
+      title: 'Flutter Tutorial',
+      // home: TutorialHome(),
+      home: TutorialHome(),
+    );
+  }
 }
 
 class TutorialHome extends StatelessWidget {
@@ -64,6 +78,24 @@ class TutorialHome extends StatelessWidget {
   }
 }
 
+enum CounterEvent { increment, decrement }
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  @override
+  int get initialState => 0;
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.decrement:
+        yield state - 1;
+        break;
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+    }
+  }
+}
 
 
 
