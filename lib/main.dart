@@ -1,27 +1,35 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import 'AppTheme.dart';
 import 'Card.dart';
+import 'ColorHelper.dart';
 import 'UserInfo.dart';
 
 void main() {
-  runApp(MaterialApp(
-    title: 'Flutter Tutorial',
-    // home: TutorialHome(),
-    home: TutorialHome(),
-  ));
+  runApp(BlocProvider<AppBloc>(
+    builder: (context) => AppBloc(),
+    child: MyApp(),));
 }
+
+
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final IncrementBloc bloc = BlocProvider.of<IncrementBloc>(context);
+    final AppBloc bloc = BlocProvider.of<AppBloc>(context);
     
-    return MaterialApp(
-      title: 'Flutter Tutorial',
-      // home: TutorialHome(),
-      home: TutorialHome(),
+    return BlocBuilder<AppBloc, ThemeData>(
+      bloc: bloc,
+      builder: (context, theme) {
+        return MaterialApp(
+                title: 'Flutter Tutorial',
+                // home: TutorialHome(),
+                home: TutorialHome(),
+                theme: theme,
+              );
+      },
     );
   }
 }
@@ -53,7 +61,7 @@ class TutorialHome extends StatelessWidget {
     // Scaffold is a layout for the major Material Components.
     return Scaffold(
       appBar: null,
-      backgroundColor: hexToColor("#F77B67"),
+      backgroundColor: Theme.of(context).primaryColor,
       // body is the majority of the screen.
       body: Container(
         child: Column(
@@ -78,27 +86,3 @@ class TutorialHome extends StatelessWidget {
   }
 }
 
-enum CounterEvent { increment, decrement }
-
-class CounterBloc extends Bloc<CounterEvent, int> {
-  @override
-  int get initialState => 0;
-
-  @override
-  Stream<int> mapEventToState(CounterEvent event) async* {
-    switch (event) {
-      case CounterEvent.decrement:
-        yield state - 1;
-        break;
-      case CounterEvent.increment:
-        yield state + 1;
-        break;
-    }
-  }
-}
-
-
-
-Color hexToColor(String code) {
-  return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-}

@@ -1,28 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:todo/main.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/AppTheme.dart';
+
+import 'ColorHelper.dart';
 
 class CardList extends StatelessWidget {
+  final taskCards = [TaskCard(AppThemeStyle.personal), TaskCard(AppThemeStyle.work), TaskCard(AppThemeStyle.home),];
   @override
   Widget build(BuildContext context) {
+    final AppBloc appBloc = BlocProvider.of<AppBloc>(context);
+
     return Container(
       height: 450.0,
       // margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
       child: PageView(
         scrollDirection: Axis.horizontal,
         controller: PageController(
-            initialPage: 1,
+            initialPage: 0,
             viewportFraction: 0.8,
           ),
-        children: <Widget>[
-          TaskCard(), 
-          TaskCard(),
-          TaskCard(),
-        ],
+        children: taskCards,
+        onPageChanged: (value) {
+          appBloc.add(taskCards[value].style);
+        },
     ),);
   }
 }
 
 class TaskCard extends StatelessWidget {
+  final AppThemeStyle style;
+
+  TaskCard(this.style);
+
+  String getStringWithStyle(AppThemeStyle style) {
+    switch (style) {
+      case AppThemeStyle.personal:
+        return "Personal";
+      case AppThemeStyle.work:
+        return "Work";
+      case AppThemeStyle.home:
+        return "Home"; 
+      default :
+        return "Personal";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -50,7 +72,7 @@ class TaskCard extends StatelessWidget {
                       child: Container(
                         width: 18,
                         height: 18,
-                        child: Center(child: Image.asset("images/user.png", color: Colors.blue, width: 18, height: 18, fit: BoxFit.fill),),
+                        child: Center(child: Image.asset("images/user.png", color: Theme.of(context).primaryColor, width: 18, height: 18, fit: BoxFit.fill),),
                       ),
                     ),
                   ),
@@ -67,7 +89,7 @@ class TaskCard extends StatelessWidget {
                 children: <Widget>[
                   Text("9 Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
                   SizedBox(height: 5,),
-                  Text("Personal", style: TextStyle(color: Colors.black, fontSize: 50),),
+                  Text(getStringWithStyle(style), style: TextStyle(color: Colors.black, fontSize: 50),),
                   SizedBox(height: 10,),
                   Container(
                     child: Row(
@@ -76,7 +98,7 @@ class TaskCard extends StatelessWidget {
                           height: 2,
                           child: LinearProgressIndicator(
                             backgroundColor: hexToColor("#EEEEEE"),
-                            valueColor: AlwaysStoppedAnimation<Color>(hexToColor("#F77B67")),
+                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
                             value: 0.8,
                           ),
                         ),),
