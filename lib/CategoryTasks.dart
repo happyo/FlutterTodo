@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'CircleBorderIcon.dart';
+import 'TasksProgressBar.dart';
+
 class CategoryTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -10,10 +13,27 @@ class CategoryTasks extends StatelessWidget {
         elevation: 0,
       ),
       body: Container(
-        child: Text("data"),
+        margin: EdgeInsets.fromLTRB(50, 20, 50, 0),
+        child: CategorySurvey(),
       ),
     );
   }
+}
+
+class CategorySurvey extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        CircleBorderIcon("images/user.png", Colors.black),
+        Text("data"),
+        Text("data"),
+        TasksProgressBar(Colors.blue, 0.8),
+      ],
+    );
+  }
+  
 }
 
 class ScaleRoute extends PageRouteBuilder {

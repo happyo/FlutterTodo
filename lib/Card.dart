@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/AppTheme.dart';
+import 'package:todo/TasksProgressBar.dart';
 
-import 'ColorHelper.dart';
 import 'CircleBorderIcon.dart';
 import 'CategoryTasks.dart';
 
@@ -99,20 +99,7 @@ class TaskCard extends StatelessWidget {
                     Text(getStringWithStyle(style), style: TextStyle(color: Colors.black, fontSize: 50),),
                     SizedBox(height: 10,),
                     Container(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(child: SizedBox(
-                            height: 2,
-                            child: LinearProgressIndicator(
-                              backgroundColor: hexToColor("#EEEEEE"),
-                              valueColor: AlwaysStoppedAnimation<Color>(AppThemes.getThemeFromKey(style).primaryColor),
-                              value: 0.8,
-                            ),
-                          ),),
-                          SizedBox(width: 10),
-                          Text("80%", style: TextStyle(color: hexToColor("#666666"), fontSize: 10,),),
-                        ],
-                      ),
+                      child: TasksProgressBar(AppThemes.getThemeFromKey(style).primaryColor, 0.6),
                     ),
                   ],
                 ),
