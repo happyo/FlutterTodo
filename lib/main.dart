@@ -18,10 +18,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final AppBloc bloc = BlocProvider.of<AppBloc>(context);
-    
     return BlocBuilder<AppBloc, ThemeData>(
-      bloc: bloc,
+      bloc: BlocProvider.of<AppBloc>(context),
       builder: (context, theme) {
         return MaterialApp(
                 title: 'Flutter Tutorial',
@@ -60,16 +58,15 @@ class TutorialHome extends StatelessWidget {
   Widget build(BuildContext context) {
     // Scaffold is a layout for the major Material Components.
     return Scaffold(
-      appBar: null,
+      appBar: bar,
       backgroundColor: Theme.of(context).primaryColor,
       // body is the majority of the screen.
       body: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-          bar,
           Container(
-            margin: EdgeInsets.fromLTRB(50, 0, 0, 0),
+            margin: EdgeInsets.fromLTRB(50, 50, 0, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

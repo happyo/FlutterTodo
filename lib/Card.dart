@@ -3,16 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/AppTheme.dart';
 
 import 'ColorHelper.dart';
+import 'CircleBorderIcon.dart';
+import 'CategoryTasks.dart';
 
 class CardList extends StatelessWidget {
   final taskCards = [TaskCard(AppThemeStyle.personal), TaskCard(AppThemeStyle.work), TaskCard(AppThemeStyle.home),];
   @override
   Widget build(BuildContext context) {
-    final AppBloc appBloc = BlocProvider.of<AppBloc>(context);
-
     return Container(
       height: 450.0,
-      // margin: EdgeInsets.fromLTRB(60, 0, 60, 0),
       child: PageView(
         scrollDirection: Axis.horizontal,
         controller: PageController(
@@ -21,7 +20,7 @@ class CardList extends StatelessWidget {
           ),
         children: taskCards,
         onPageChanged: (value) {
-          appBloc.add(taskCards[value].style);
+          BlocProvider.of<AppBloc>(context).add(taskCards[value].style);
         },
     ),);
   }
@@ -45,71 +44,80 @@ class TaskCard extends StatelessWidget {
     }
   }
 
+  String getImageStrWithStyle(AppThemeStyle style) {
+    var imageStr = "";
+    switch (style) {
+      case AppThemeStyle.personal:
+        imageStr = "images/user.png";
+        break;
+      case AppThemeStyle.work:
+        imageStr = "images/work.png";
+        break;
+      case AppThemeStyle.home:
+        imageStr = "images/home.png";
+    }
+
+    return imageStr;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       // height: 200,
-      child: Card(
-        margin: EdgeInsets.all(10),
-        child: Container(
-          // ba
-          margin: EdgeInsets.all(15),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Row(
-                children: <Widget>[
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(context, ScaleRoute(page: CategoryTasks()));
+        },
+        child: Card(
+          margin: EdgeInsets.all(10),
+          child: Container(
+            // ba
+            margin: EdgeInsets.all(15),
+            child: Column(
+              children: <Widget>[
                 Expanded(
-                  child: Container(
-                    alignment: Alignment.topLeft,
+                  child: Row(
+                  children: <Widget>[
+                  Expanded(
                     child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey[200], width: 2,),
-                      ),
-                      width: 50,
-                      height: 50,
-                      child: Container(
-                        width: 18,
-                        height: 18,
-                        child: Center(child: Image.asset("images/user.png", color: AppThemes.getThemeFromKey(style).primaryColor, width: 18, height: 18, fit: BoxFit.fill),),
-                      ),
+                      alignment: Alignment.topLeft,
+                      child: CircleBorderIcon(getImageStrWithStyle(style), AppThemes.getThemeFromKey(style).primaryColor)
                     ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.topRight,
-                  margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: Image.asset("images/more.png", height: 16, width: 16,),
-                ),
-              ],),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text("9 Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
-                  SizedBox(height: 5,),
-                  Text(getStringWithStyle(style), style: TextStyle(color: Colors.black, fontSize: 50),),
-                  SizedBox(height: 10,),
                   Container(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(child: SizedBox(
-                          height: 2,
-                          child: LinearProgressIndicator(
-                            backgroundColor: hexToColor("#EEEEEE"),
-                            valueColor: AlwaysStoppedAnimation<Color>(AppThemes.getThemeFromKey(style).primaryColor),
-                            value: 0.8,
-                          ),
-                        ),),
-                        SizedBox(width: 10),
-                        Text("80%", style: TextStyle(color: hexToColor("#666666"), fontSize: 10,),),
-                      ],
-                    ),
+                    alignment: Alignment.topRight,
+                    margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Image.asset("images/more.png", height: 16, width: 16,),
                   ),
-                ],
-              ),
-            ],
+                ],),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text("9 Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
+                    SizedBox(height: 5,),
+                    Text(getStringWithStyle(style), style: TextStyle(color: Colors.black, fontSize: 50),),
+                    SizedBox(height: 10,),
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(child: SizedBox(
+                            height: 2,
+                            child: LinearProgressIndicator(
+                              backgroundColor: hexToColor("#EEEEEE"),
+                              valueColor: AlwaysStoppedAnimation<Color>(AppThemes.getThemeFromKey(style).primaryColor),
+                              value: 0.8,
+                            ),
+                          ),),
+                          SizedBox(width: 10),
+                          Text("80%", style: TextStyle(color: hexToColor("#666666"), fontSize: 10,),),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
