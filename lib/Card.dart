@@ -72,7 +72,7 @@ class TaskCard extends StatelessWidget {
                       child: Container(
                         width: 18,
                         height: 18,
-                        child: Center(child: Image.asset("images/user.png", color: Theme.of(context).primaryColor, width: 18, height: 18, fit: BoxFit.fill),),
+                        child: Center(child: Image.asset("images/user.png", color: AppThemes.getThemeFromKey(style).primaryColor, width: 18, height: 18, fit: BoxFit.fill),),
                       ),
                     ),
                   ),
@@ -98,7 +98,7 @@ class TaskCard extends StatelessWidget {
                           height: 2,
                           child: LinearProgressIndicator(
                             backgroundColor: hexToColor("#EEEEEE"),
-                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                            valueColor: AlwaysStoppedAnimation<Color>(AppThemes.getThemeFromKey(style).primaryColor),
                             value: 0.8,
                           ),
                         ),),

@@ -8,6 +8,7 @@ enum AppThemeStyle { personal, home, work }
 class AppThemes {
   static final ThemeData personalTheme = ThemeData(
     primaryColor: hexToColor("#F77B67"),
+    accentColor: Colors.white,
     // brightness: Brightness.light,
   );
 

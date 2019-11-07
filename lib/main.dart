@@ -46,7 +46,7 @@ class TutorialHome extends StatelessWidget {
           tooltip: 'Navigation menu',
           onPressed: null,
         ),
-        title: Text('TODO'),
+        title: Text('TODO', style: TextStyle(color: Colors.white),),
         actions: <Widget>[
           IconButton(
             icon: ImageIcon(AssetImage("images/search.png"), color: Colors.white,),
