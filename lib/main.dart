@@ -8,8 +8,8 @@ import 'ColorHelper.dart';
 import 'UserInfo.dart';
 
 void main() {
-  runApp(BlocProvider<AppBloc>(
-    builder: (context) => AppBloc(),
+  runApp(BlocProvider<AppThemeBloc>(
+    builder: (context) => AppThemeBloc(),
     child: MyApp(),));
 }
 
@@ -18,8 +18,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppBloc, ThemeData>(
-      bloc: BlocProvider.of<AppBloc>(context),
+    return BlocBuilder<AppThemeBloc, ThemeData>(
+      bloc: BlocProvider.of<AppThemeBloc>(context),
       builder: (context, theme) {
         return MaterialApp(
                 title: 'Flutter Tutorial',

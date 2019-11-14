@@ -5,6 +5,7 @@ import 'package:todo/TasksProgressBar.dart';
 
 import 'CircleBorderIcon.dart';
 import 'CategoryTasks.dart';
+import 'ScaleRoute.dart';
 
 class CardList extends StatelessWidget {
   final taskCards = [TaskCard(AppThemeStyle.personal), TaskCard(AppThemeStyle.work), TaskCard(AppThemeStyle.home),];
@@ -20,7 +21,7 @@ class CardList extends StatelessWidget {
           ),
         children: taskCards,
         onPageChanged: (value) {
-          BlocProvider.of<AppBloc>(context).add(taskCards[value].style);
+          BlocProvider.of<AppThemeBloc>(context).add(taskCards[value].style);
         },
     ),);
   }
@@ -31,42 +32,13 @@ class TaskCard extends StatelessWidget {
 
   TaskCard(this.style);
 
-  String getStringWithStyle(AppThemeStyle style) {
-    switch (style) {
-      case AppThemeStyle.personal:
-        return "Personal";
-      case AppThemeStyle.work:
-        return "Work";
-      case AppThemeStyle.home:
-        return "Home"; 
-      default :
-        return "Personal";
-    }
-  }
-
-  String getImageStrWithStyle(AppThemeStyle style) {
-    var imageStr = "";
-    switch (style) {
-      case AppThemeStyle.personal:
-        imageStr = "images/user.png";
-        break;
-      case AppThemeStyle.work:
-        imageStr = "images/work.png";
-        break;
-      case AppThemeStyle.home:
-        imageStr = "images/home.png";
-    }
-
-    return imageStr;
-  }
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       // height: 200,
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, ScaleRoute(page: CategoryTasks()));
+          Navigator.push(context, ScaleRoute(page: CategoryTasks(style)));
         },
         child: Card(
           margin: EdgeInsets.all(10),
@@ -81,7 +53,7 @@ class TaskCard extends StatelessWidget {
                   Expanded(
                     child: Container(
                       alignment: Alignment.topLeft,
-                      child: CircleBorderIcon(getImageStrWithStyle(style), AppThemes.getThemeFromKey(style).primaryColor)
+                      child: CircleBorderIcon(AppThemes.getImageStrWithStyle(style), AppThemes.getThemeFromKey(style).primaryColor)
                     ),
                   ),
                   Container(
@@ -96,7 +68,7 @@ class TaskCard extends StatelessWidget {
                   children: <Widget>[
                     Text("9 Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
                     SizedBox(height: 5,),
-                    Text(getStringWithStyle(style), style: TextStyle(color: Colors.black, fontSize: 50),),
+                    Text(AppThemes.getStringWithStyle(style), style: TextStyle(color: Colors.black, fontSize: 50),),
                     SizedBox(height: 10,),
                     Container(
                       child: TasksProgressBar(AppThemes.getThemeFromKey(style).primaryColor, 0.6),

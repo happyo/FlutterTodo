@@ -34,9 +34,38 @@ class AppThemes {
         return personalTheme;
     }
   }
+
+  static String getStringWithStyle(AppThemeStyle style) {
+    switch (style) {
+      case AppThemeStyle.personal:
+        return "Personal";
+      case AppThemeStyle.work:
+        return "Work";
+      case AppThemeStyle.home:
+        return "Home"; 
+      default :
+        return "Personal";
+    }
+  }
+
+  static String getImageStrWithStyle(AppThemeStyle style) {
+    var imageStr = "";
+    switch (style) {
+      case AppThemeStyle.personal:
+        imageStr = "images/user.png";
+        break;
+      case AppThemeStyle.work:
+        imageStr = "images/work.png";
+        break;
+      case AppThemeStyle.home:
+        imageStr = "images/home.png";
+    }
+
+    return imageStr;
+  }
 }
 
-class AppBloc extends Bloc<AppThemeStyle, ThemeData> {
+class AppThemeBloc extends Bloc<AppThemeStyle, ThemeData> {
   @override
   ThemeData get initialState => AppThemes.personalTheme;
 
@@ -44,5 +73,6 @@ class AppBloc extends Bloc<AppThemeStyle, ThemeData> {
   Stream<ThemeData> mapEventToState(AppThemeStyle event) async* {
     yield AppThemes.getThemeFromKey(event);
   }
+  
   
 }
