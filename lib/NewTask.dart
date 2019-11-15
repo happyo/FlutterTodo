@@ -1,4 +1,6 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/AppTheme.dart';
 
 class NewTask extends StatelessWidget {
@@ -6,18 +8,28 @@ class NewTask extends StatelessWidget {
 
   NewTask(this.style);
 
+  final NewTaskBloc bloc = NewTaskBloc();
+
   Color get primaryColor => AppThemes.getThemeFromKey(style).primaryColor;
 
-  Future _selectDate(BuildContext context) async {
-    DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: new DateTime(2017),
-        firstDate: new DateTime(2016),
-        lastDate: new DateTime(2020)
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime(2016, 8),
+  //     firstDate: DateTime(2015, 8),
+  //     lastDate: DateTime(2101),
+  //   );
+  //   if (picked != null) 
+  //     bloc.add(picked);
+  // }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
     );
-    if (picked != null) {
-      
-    }
+    if (picked != null)
+      bloc.add(picked);
   }
 
   @override
@@ -39,11 +51,16 @@ class NewTask extends StatelessWidget {
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                   ),
-                  Text("Design Work"),
+                  BlocBuilder(
+                    bloc: bloc,
+                    builder: (context, str) {
+                      return Text(str);
+                    },
+                  ),
                   FlatButton(
                     onPressed: () {
                       FocusScope.of(context).requestFocus(new FocusNode());
-                      _selectDate(context);
+                      _selectTime(context);
                     },
                     child: Text('Show DateTime Picker',)
                   ),
@@ -68,6 +85,18 @@ class NewTask extends StatelessWidget {
         ),
       ),
     );
+  }
+
+
+}
+
+class NewTaskBloc extends Bloc<TimeOfDay, String> {
+  @override
+  String get initialState => "";
+
+  @override
+  Stream<String> mapEventToState(TimeOfDay event) async* {
+    yield "asdf";
   }
 
 
