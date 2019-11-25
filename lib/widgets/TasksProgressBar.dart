@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'ColorHelper.dart';
+import 'package:todo/utils/ColorHelper.dart';
 
 class TasksProgressBar extends StatelessWidget {
   final Color progressColor;

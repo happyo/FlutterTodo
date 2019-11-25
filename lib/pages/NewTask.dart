@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todo/AppTheme.dart';
+import 'package:todo/utils/AppTheme.dart';
 
 class NewTask extends StatelessWidget {
   final AppThemeStyle style;
@@ -78,8 +78,6 @@ class NewTask extends StatelessWidget {
       ),
     );
   }
-
-
 }
 
 class NewTaskBloc extends Bloc<DateTime, String> {

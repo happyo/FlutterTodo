@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/AppTheme.dart';
-import 'package:todo/TasksProgressBar.dart';
+import 'package:todo/utils/AppTheme.dart';
+import 'package:todo/utils/ScaleRoute.dart';
+import 'package:todo/widgets/CircleBorderIcon.dart';
+import 'package:todo/widgets/TasksProgressBar.dart';
 
-import 'CircleBorderIcon.dart';
 import 'CategoryTasks.dart';
-import 'ScaleRoute.dart';
 
 class CardList extends StatelessWidget {
   final taskCards = [TaskCard(AppThemeStyle.personal), TaskCard(AppThemeStyle.work), TaskCard(AppThemeStyle.home),];

@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todo/AppTheme.dart';
-import 'package:todo/ColorHelper.dart';
-import 'package:todo/NewTask.dart';
-
-import 'CircleBorderIcon.dart';
-import 'ScaleRoute.dart';
-import 'TasksList.dart';
-import 'TasksProgressBar.dart';
+import 'package:todo/pages/NewTask.dart';
+import 'package:todo/pages/TasksList.dart';
+import 'package:todo/utils/AppTheme.dart';
+import 'package:todo/utils/ColorHelper.dart';
+import 'package:todo/utils/ScaleRoute.dart';
+import 'package:todo/widgets/CircleBorderIcon.dart';
+import 'package:todo/widgets/TasksProgressBar.dart';
 
 class CategoryTasks extends StatelessWidget {
   final AppThemeStyle style;

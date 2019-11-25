@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
-import 'AppTheme.dart';
-import 'Card.dart';
-import 'ColorHelper.dart';
-import 'UserInfo.dart';
+import 'package:todo/pages/Card.dart';
+import 'package:todo/utils/AppTheme.dart';
+import 'package:todo/utils/ColorHelper.dart';
+import 'package:todo/widgets/UserInfo.dart';
 
 void main() {
   runApp(BlocProvider<AppThemeBloc>(
