@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todo/pages/CreateTaskPage.dart';
-import 'package:todo/widgets/TasksList.dart';
-import 'package:todo/utils/AppTheme.dart';
-import 'package:todo/utils/ColorHelper.dart';
-import 'package:todo/utils/ScaleRoute.dart';
-import 'package:todo/widgets/CircleBorderIcon.dart';
-import 'package:todo/widgets/TasksProgressBar.dart';
+import 'package:todo/pages/create_task_page.dart';
+import 'package:todo/utils/app_theme.dart';
+import 'package:todo/utils/color_helper.dart';
+import 'package:todo/utils/custom_router.dart';
+import 'package:todo/widgets/bucket_progress_bar.dart';
+import 'package:todo/widgets/circle_boarder_icon.dart';
+import 'package:todo/widgets/task_list.dart';
 
 class TaskBucketPage extends StatelessWidget {
   final AppThemeStyle style;
