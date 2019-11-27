@@ -22,5 +22,4 @@ class CircleBorderIcon extends StatelessWidget {
             ),
           );
   }
-  
 }

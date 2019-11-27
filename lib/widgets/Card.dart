@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/blocs/AppThemeBloc.dart';
+import 'package:todo/pages/TaskBucketPage.dart';
 import 'package:todo/utils/AppTheme.dart';
 import 'package:todo/utils/ScaleRoute.dart';
 import 'package:todo/widgets/CircleBorderIcon.dart';
 import 'package:todo/widgets/TasksProgressBar.dart';
-
-import 'CategoryTasks.dart';
 
 class CardList extends StatelessWidget {
   final taskCards = [TaskCard(AppThemeStyle.personal), TaskCard(AppThemeStyle.work), TaskCard(AppThemeStyle.home),];
@@ -38,7 +38,7 @@ class TaskCard extends StatelessWidget {
       // height: 200,
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, ScaleRoute(page: CategoryTasks(style)));
+          Navigator.push(context, ScaleRoute(page: TaskBucketPage(style)));
         },
         child: Card(
           margin: EdgeInsets.all(10),

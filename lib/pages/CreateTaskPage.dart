@@ -1,15 +1,14 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:todo/blocs/TaskBloc.dart';
 import 'package:todo/utils/AppTheme.dart';
 
-class NewTask extends StatelessWidget {
+class CreateTaskPage extends StatelessWidget {
   final AppThemeStyle style;
 
-  NewTask(this.style);
+  CreateTaskPage(this.style);
 
-  final NewTaskBloc bloc = NewTaskBloc();
+  final TaskBloc bloc = TaskBloc();
 
   Color get primaryColor => AppThemes.getThemeFromKey(style).primaryColor;
 
@@ -80,15 +79,3 @@ class NewTask extends StatelessWidget {
   }
 }
 
-class NewTaskBloc extends Bloc<DateTime, String> {
-  @override
-  String get initialState => "";
-
-  @override
-  Stream<String> mapEventToState(DateTime event) async* {
-    var str = DateFormat().add_yMMMd().format(event);
-    yield str;
-  }
-
-
-}

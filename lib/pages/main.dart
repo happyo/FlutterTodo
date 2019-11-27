@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todo/pages/Card.dart';
-import 'package:todo/utils/AppTheme.dart';
+import 'package:todo/blocs/AppThemeBloc.dart';
+import 'package:todo/widgets/Card.dart';
 import 'package:todo/utils/ColorHelper.dart';
 import 'package:todo/widgets/UserInfo.dart';
 
