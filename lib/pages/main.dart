@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todo/blocs/AppThemeBloc.dart';
+import 'package:todo/blocs/app_theme_bloc.dart';
+import 'package:todo/utils/app_theme.dart';
+import 'package:todo/utils/color_helper.dart';
 import 'package:todo/widgets/Card.dart';
-import 'package:todo/utils/ColorHelper.dart';
-import 'package:todo/widgets/UserInfo.dart';
+import 'package:todo/widgets/user_info.dart';
 
 void main() {
   runApp(BlocProvider<AppThemeBloc>(
@@ -22,7 +23,6 @@ class MyApp extends StatelessWidget {
       builder: (context, theme) {
         return MaterialApp(
                 title: 'Flutter Tutorial',
-                // home: TutorialHome(),
                 home: TutorialHome(),
                 theme: theme,
               );
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
 
 class TutorialHome extends StatelessWidget {
   final userSection = UserInfo();
-  final haha = CardList();
+  final haha = CardList([TaskCard(AppThemeStyle.home)]);
 
   final bar = AppBar(
         backgroundColor: Colors.transparent,

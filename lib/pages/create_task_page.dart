@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/blocs/TaskBloc.dart';
-import 'package:todo/utils/AppTheme.dart';
+import 'package:todo/blocs/task_bloc.dart';
+import 'package:todo/utils/app_theme.dart';
 
 class CreateTaskPage extends StatelessWidget {
   final AppThemeStyle style;

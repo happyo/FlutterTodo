@@ -8,7 +8,9 @@ import 'package:todo/widgets/bucket_progress_bar.dart';
 import 'package:todo/widgets/circle_boarder_icon.dart';
 
 class CardList extends StatelessWidget {
-  final taskCards = [TaskCard(AppThemeStyle.personal), TaskCard(AppThemeStyle.work), TaskCard(AppThemeStyle.home),];
+  List<TaskCard> taskCards;
+
+  CardList(this.taskCards); 
   @override
   Widget build(BuildContext context) {
     return Container(
