@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'ColorHelper.dart';
+import 'package:todo/utils/color_helper.dart';
 
 enum AppThemeStyle { personal, home, work }
 

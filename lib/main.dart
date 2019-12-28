@@ -1,8 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
-import 'package:todo/utils/app_theme.dart';
+import 'package:todo/blocs/task_bucket_bloc.dart';
+import 'package:todo/models/task_bucket.dart';
 import 'package:todo/utils/color_helper.dart';
 import 'package:todo/widgets/Card.dart';
 import 'package:todo/widgets/user_info.dart';
@@ -12,8 +15,6 @@ void main() {
     builder: (context) => AppThemeBloc(),
     child: MyApp(),));
 }
-
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -33,15 +34,23 @@ class MyApp extends StatelessWidget {
 
 class TutorialHome extends StatelessWidget {
   final userSection = UserInfo();
-  final haha = CardList([TaskCard(AppThemeStyle.home)]);
+  final taskBucketBloc = TaskBucketBloc();
 
-  final bar = AppBar(
+  Widget generateHaha() {
+    return StreamProvider<List<TaskBucket>>(
+      create: (_) => taskBucketBloc.taskBuckets,
+      child: CardList(),
+    );
+  }
+
+  Widget generateBar() {
+    return AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: ImageIcon(AssetImage("images/menu.png"), color: Colors.white,),
           tooltip: 'Navigation menu',
-          onPressed: null,
+          onPressed: () => taskBucketBloc.fetchData(),
         ),
         title: Text('TODO', style: TextStyle(color: Colors.white),),
         actions: <Widget>[
@@ -52,12 +61,13 @@ class TutorialHome extends StatelessWidget {
           ),
         ],
       );
+  }
 
   @override
   Widget build(BuildContext context) {
     // Scaffold is a layout for the major Material Components.
     return Scaffold(
-      appBar: bar,
+      appBar: generateBar(),
       backgroundColor: Theme.of(context).primaryColor,
       // body is the majority of the screen.
       body: Container(
@@ -76,7 +86,7 @@ class TutorialHome extends StatelessWidget {
                 ),
               ],),
           ),
-          haha,
+          generateHaha(),
       ],),)
     );
   }

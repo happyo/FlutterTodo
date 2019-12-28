@@ -5,4 +5,6 @@ class Task {
   String content;
   DateTime deadline;
   bool finished;
+
+  Task(this.content);
 }
