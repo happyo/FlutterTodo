@@ -25,7 +25,7 @@ class CardList extends StatelessWidget {
             viewportFraction: 0.8,
           ),
         // children: generateCards(taskBuckets),
-        children: null,
+        children: generateCards(taskBuckets),
         onPageChanged: (value) {
           BlocProvider.of<AppThemeBloc>(context).add(taskBuckets[value].style);
         },

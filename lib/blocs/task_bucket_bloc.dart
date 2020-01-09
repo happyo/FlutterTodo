@@ -1,19 +1,20 @@
 import 'package:rxdart/subjects.dart';
-import 'package:todo/models/task.dart';
 import 'package:todo/models/task_bucket.dart';
-import 'package:todo/utils/app_theme.dart';
+import 'package:todo/servers/task_bucket_server.dart';
 
 class TaskBucketBloc {
   final _taskBucketPublisher = PublishSubject<List<TaskBucket>>();
 
   get taskBuckets => _taskBucketPublisher.stream;
 
-  fetchData() {
-    TaskBucket taskBucket = TaskBucket(AppThemeStyle.home);
-    Task task1 = Task("asdfasdf");
-    taskBucket.tasks = [task1];
+  TaskBucketBloc() {
+    fetchData();
+  }
 
-    _taskBucketPublisher.add([taskBucket]);
+  fetchData() {
+    var server = TaskBucketServer();
+
+    _taskBucketPublisher.add(server.fetchBuckets());
   }
 
   dispose () {
