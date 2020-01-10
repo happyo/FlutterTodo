@@ -48,7 +48,7 @@ class TaskCard extends StatelessWidget {
       // height: 200,
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, ScaleRoute(page: TaskBucketPage(taskBucket.style)));
+          Navigator.push(context, ScaleRoute(page: Provider<TaskBucket>(create: (_) => taskBucket, child: TaskBucketPage(),)));
         },
         child: Card(
           margin: EdgeInsets.all(10),
@@ -81,7 +81,7 @@ class TaskCard extends StatelessWidget {
                     Text(AppThemes.getStringWithStyle(taskBucket.style), style: TextStyle(color: Colors.black, fontSize: 50),),
                     SizedBox(height: 10,),
                     Container(
-                      child: TasksProgressBar(AppThemes.getThemeFromKey(taskBucket.style).primaryColor, 0.6),
+                      child: TasksProgressBar(AppThemes.getThemeFromKey(taskBucket.style).primaryColor, taskBucket.taskProgress()),
                     ),
                   ],
                 ),
