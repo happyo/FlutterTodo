@@ -1,32 +1,39 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
 import 'package:todo/blocs/task_bucket_bloc.dart';
 import 'package:todo/models/task_bucket.dart';
+import 'package:todo/utils/app_theme.dart';
 import 'package:todo/utils/color_helper.dart';
 import 'package:todo/widgets/Card.dart';
 import 'package:todo/widgets/user_info.dart';
 
 void main() {
-  runApp(BlocProvider<AppThemeBloc>(
-    builder: (context) => AppThemeBloc(),
-    child: MyApp(),));
+  runApp(
+    Provider(
+      create: (_) => AppThemeBloc(),
+      dispose: (_, bloc) => bloc.dispose(),
+      builder: (_) => MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppThemeBloc, ThemeData>(
-      bloc: BlocProvider.of<AppThemeBloc>(context),
-      builder: (context, theme) {
+    final themeBloc = Provider.of<AppThemeBloc>(context);
+
+    return StreamBuilder(
+      stream: themeBloc.themeData,
+      initialData: AppThemes.personalTheme,
+      builder: (context, snapshot) {
         return MaterialApp(
-                title: 'Flutter Tutorial',
-                home: TutorialHome(),
-                theme: theme,
-              );
+          title: 'Flutter Tutorial',
+          home: TutorialHome(),
+          theme: snapshot.data,
+        ); 
       },
     );
   }

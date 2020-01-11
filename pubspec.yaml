@@ -21,7 +21,6 @@ dependencies:
     sdk: flutter
   intl: ^0.16.0
   rxdart: ^0.22.5
-  flutter_bloc: ^2.0.0
   uuid: ^2.0.4
   provider: ^3.2.0
 

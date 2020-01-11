@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
 import 'package:todo/models/task_bucket.dart';
@@ -27,7 +26,7 @@ class CardList extends StatelessWidget {
         // children: generateCards(taskBuckets),
         children: generateCards(taskBuckets),
         onPageChanged: (value) {
-          BlocProvider.of<AppThemeBloc>(context).add(taskBuckets[value].style);
+          Provider.of<AppThemeBloc>(context).changeStyle(taskBuckets[value].style);
         },
     );
   }
