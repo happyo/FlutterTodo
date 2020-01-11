@@ -46,7 +46,7 @@ class TaskBucketPage extends StatelessWidget {
             ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.of(context).push(FadeRoute(page: CreateTaskPage(taskBucket.style)));
+              Navigator.of(context).push(FadeRoute(page: CreateTaskPage(taskBucket.style, taskBucket.id)));
             },
             child: Icon(Icons.add, color: Colors.white,),
             backgroundColor: primaryColor(taskBucket.style),

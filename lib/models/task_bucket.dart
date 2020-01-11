@@ -1,10 +1,12 @@
 import 'package:todo/models/task.dart';
 import 'package:todo/utils/app_theme.dart';
+import 'package:uuid/uuid.dart';
 
 class TaskBucket {
+  Uuid id;
   String title;
   String iconStr;
-  List<Task> tasks;
+  List<Task> tasks = [];
   AppThemeStyle style;
 
   TaskBucket(this.style);
