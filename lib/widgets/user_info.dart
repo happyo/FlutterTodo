@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UserInfo extends StatelessWidget {
+  final int taskCount;
+
+  UserInfo(this.taskCount);
+
   @override
   Widget build(BuildContext context) {
     return Container(child: Column(
@@ -9,7 +13,7 @@ class UserInfo extends StatelessWidget {
       children: <Widget>[
           UserImage(),
           Text("Hello, Jane.", style: TextStyle(color: Colors.white, fontSize: 36),),
-          Text("Looks like feel good.\nYou have 3 tasks to do today.", style: TextStyle(color: Colors.white54, fontSize: 15),),
+          Text("Looks like feel good.\nYou have $taskCount tasks to do today.", style: TextStyle(color: Colors.white54, fontSize: 15),),
     ],),);
   }
 }

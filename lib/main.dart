@@ -15,7 +15,7 @@ void main() {
     Provider(
       create: (_) => AppThemeBloc(),
       dispose: (_, bloc) => bloc.dispose(),
-      builder: (_) => MyApp(),
+      child: MyApp(),
     )
   );
 }
@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
       initialData: AppThemes.personalTheme,
       builder: (context, snapshot) {
         return MaterialApp(
-          title: 'Flutter Tutorial',
-          home: TutorialHome(),
+          title: 'Flutter Todo',
+          home: HomePage(),
           theme: snapshot.data,
         ); 
       },
@@ -39,16 +39,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class TutorialHome extends StatelessWidget {
-  final userSection = UserInfo();
+class HomePage extends StatelessWidget {
   final taskBucketBloc = TaskBucketBloc();
+
+  Widget userSection(TaskBucketBloc bloc) {
+    return StreamBuilder(
+      stream: taskBucketBloc.showCount,
+      initialData: 0,
+      builder: (context, snapshot) {
+        return UserInfo(snapshot.data);
+      },
+    );
+  }
 
   Widget generateHaha() {
     return StreamProvider<List<TaskBucket>>(
       create: (_) => taskBucketBloc.taskBuckets,
       child: CardList(),
     );
-  }
+  }           
 
   Widget generateBar() {
     return AppBar(
@@ -57,14 +66,14 @@ class TutorialHome extends StatelessWidget {
         leading: IconButton(
           icon: ImageIcon(AssetImage("images/menu.png"), color: Colors.white,),
           tooltip: 'Navigation menu',
-          onPressed: () => taskBucketBloc.fetchData(),
+          onPressed: () => taskBucketBloc.getCount(),
         ),
         title: Text('TODO', style: TextStyle(color: Colors.white),),
         actions: <Widget>[
           IconButton(
             icon: ImageIcon(AssetImage("images/search.png"), color: Colors.white,),
             tooltip: 'Search',
-            onPressed: null,
+            onPressed: () => taskBucketBloc.insert(),
           ),
         ],
       );
@@ -86,7 +95,7 @@ class TutorialHome extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                userSection,
+                userSection(taskBucketBloc),
                 Container(
                   margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
                   child: Text(DateFormat().add_yMMMd().format(DateTime.now()), style: TextStyle(color: hexToColor("#FFFFFF"), fontSize: 15,),),
