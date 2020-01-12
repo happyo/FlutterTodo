@@ -27,7 +27,7 @@ class TaskBucketBloc {
   }
 
   insert() {
-    var task = TaskModel(id: 1, iconStr: "home", title: "asdfsadfsd", style: AppThemeStyle.home);
+    var task = TaskBucketModel(id: 1, iconStr: "home", title: "asdfsadfsd", style: AppThemeStyle.home);
     TaskBucketDB().insertTask(task).then(getCount());
   }
 

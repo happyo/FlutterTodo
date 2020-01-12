@@ -30,12 +30,11 @@ class TaskBucketDB {
     // Set the path to the database. Note: Using the `join` function from the
     // `path` package is best practice to ensure the path is correctly
     // constructed for each platform.
-    join(await getDatabasesPath(), 'doggie_database.db'),
+    join(await getDatabasesPath(), 'todo_database.db'),
     // When the database is first created, create a table to store dogs.
-    onCreate: (db, version) {
-      return db.execute(
-        "CREATE TABLE buckets(id INTEGER PRIMARY KEY, title TEXT, iconStr Text, style INTEGER)",
-      );
+    onCreate: (db, version) async {
+      await _createBucketTable(db);
+      await _createTaskTable(db);
     },
     // Set the version. This executes the onCreate function and provides a
     // path to perform database upgrades and downgrades.
@@ -44,15 +43,53 @@ class TaskBucketDB {
     didInit = true;
   }
 
-  Future<List<TaskModel>> testAll() async {
-    final List<Map<String, dynamic>> maps = await _database.query("buckets");
+  Future _createBucketTable(Database db) {
+    return db.transaction((txn) async {
+      txn.execute("CREATE TABLE ${TaskBucketModel.tblTaskBucket} ("
+        "${TaskBucketModel.dbId} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${TaskBucketModel.dbTitle} TEXT,"
+        "${TaskBucketModel.dbIconStr} TEXT,"
+        "${TaskBucketModel.dbStyle} INTEGER);");
+      
+      txn.insert(TaskBucketModel.tblTaskBucket, {
+        TaskBucketModel.dbTitle: "Personal",
+        TaskBucketModel.dbIconStr: "",
+        TaskBucketModel.dbStyle: 0,
+      });
 
-    return List.generate(maps.length, (i) {
-      return TaskModel.fromMap(maps[i]);
+      txn.insert(TaskBucketModel.tblTaskBucket, {
+        TaskBucketModel.dbTitle: "Work",
+        TaskBucketModel.dbIconStr: "",
+        TaskBucketModel.dbStyle: 1,
+      });
+
+      txn.insert(TaskBucketModel.tblTaskBucket, {
+        TaskBucketModel.dbTitle: "Home",
+        TaskBucketModel.dbIconStr: "",
+        TaskBucketModel.dbStyle: 2,
+      });
     });
   }
 
-  Future insertTask(TaskModel model) async {
+  Future _createTaskTable(Database db) {
+    return db.execute("CREATE TABLE ${TaskModel.tblTask} ("
+        "${TaskModel.dbId} INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "${TaskModel.dbContent} TEXT,"
+        "${TaskModel.dbDeadline} INTEGER,"
+        "${TaskModel.dbFinished} INTEGER,"
+        "${TaskModel.dbBucketId} INTEGER,"
+        "FOREIGN KEY(${TaskModel.dbBucketId}) REFERENCES ${TaskBucketModel.tblTaskBucket}(${TaskBucketModel.dbId}) ON DELETE CASCADE);");
+  }
+
+  Future<List<TaskBucketModel>> testAll() async {
+    final List<Map<String, dynamic>> maps = await _database.query("buckets");
+
+    return List.generate(maps.length, (i) {
+      return TaskBucketModel.fromMap(maps[i]);
+    });
+  }
+
+  Future insertTask(TaskBucketModel model) async {
     _database.insert("buckets", model.toMap());
   }
 
@@ -90,27 +127,68 @@ class TaskBucketDB {
   }
 }
 
-class TaskModel {
+class TaskBucketModel {
+  static final String tblTaskBucket = "buckets";
+  static final String dbId = "id";
+  static final String dbIconStr = "iconStr";
+  static final String dbTitle = "title";
+  static final String dbStyle = "style";
+
   int id;
   String iconStr;
   String title;
   AppThemeStyle style;
 
-  TaskModel({this.id, this.iconStr, this.title, this.style});
+  TaskBucketModel({this.id, this.iconStr, this.title, this.style});
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'title': title,
-      'iconStr': iconStr,
-      'style': style.index,
+      dbId: id,
+      dbTitle: title,
+      dbIconStr: iconStr,
+      dbStyle: style.index,
+    };
+  }
+
+  TaskBucketModel.fromMap(Map<String, dynamic> map) {
+    id = map[dbId];
+    iconStr = map[dbIconStr];
+    title = map[dbTitle];
+    style = AppThemeStyle.values[map[dbStyle]];
+  }
+}
+
+class TaskModel {
+  static final String tblTask = "tasks";
+  static final String dbId = "id";
+  static final String dbContent = "content";
+  static final String dbDeadline = "deadline";
+  static final String dbFinished = "finished";
+  static final String dbBucketId = "bucketId";
+
+  int id;
+  String content;
+  DateTime deadline;
+  bool finished;
+  int bucketId;
+
+  TaskModel({this.id, this.content, this.deadline, this.finished, this.bucketId});
+
+  Map<String, dynamic> toMap() {
+    return {
+      dbId: id,
+      dbContent: content,
+      dbDeadline: deadline.millisecondsSinceEpoch,
+      dbFinished: finished,
+      dbBucketId: bucketId,
     };
   }
 
   TaskModel.fromMap(Map<String, dynamic> map) {
-    id = map["id"];
-    iconStr = map["iconStr"];
-    title = map["title"];
-    style = AppThemeStyle.values[map["style"]];
+    id = map[dbId];
+    content = map[dbContent];
+    deadline = DateTime.fromMicrosecondsSinceEpoch(map[dbDeadline]);
+    finished = map[dbFinished];
+    bucketId = map[dbBucketId];
   }
 }
