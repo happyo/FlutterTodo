@@ -84,13 +84,7 @@ class TaskBucketDB {
   Future<List<TaskBucketModel>> fetchBuckets() async {
     final List<Map<String, dynamic>> maps = await _database.query(TaskBucketModel.tblTaskBucket);
 
-    return List.generate(maps.length, (i) {
-      return TaskBucketModel.fromMap(maps[i]);
-    });
-  }
-
-  Future insertTask(TaskBucketModel model) async {
-    _database.insert("buckets", model.toMap());
+    return maps.map((m) => TaskBucketModel.fromMap(m));
   }
 
   Future<int> fetchUnfinishedTasksCount() async {
@@ -99,28 +93,15 @@ class TaskBucketDB {
     return count;
   }
 
-  // List<TaskBucket> _all = _initBuckets();
+  Future<List<TaskModel>> fetchTasks(int bucketId) async {
+    final List<Map> maps = await _database.query(TaskModel.tblTask, where: "bucketId = ?", whereArgs: [bucketId]);
 
-  // void createTask(Task task, Uuid bucketId) {
-  //   var bucket = _all.firstWhere((bucket) => bucket.id == bucketId);
+    return maps.map((m) => TaskModel.fromMap(m));
+  }
 
-  //   if (bucket != null) {
-  //     bucket.tasks.add(task);
-  //   }
-  // }
-
-  // static List<TaskBucket> _initBuckets() {
-  //   TaskBucket taskBucket = TaskBucket(AppThemeStyle.home);
-  //   Task task1 = Task("asdfasdf");
-
-  //   TaskBucket taskBucket1 = TaskBucket(AppThemeStyle.work);
-  //   Task task2 = Task("asdfasdf");
-
-  //   taskBucket.tasks = [task1, task2];
-  //   taskBucket1.tasks = [task2];
-    
-  //   return [taskBucket, taskBucket1];
-  // }
+  Future insertTask(TaskModel task) {
+    return _database.insert(TaskModel.tblTask, task.toMap());
+  }
 }
 
 class TaskBucketModel {

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/blocs/task_bucket_bloc.dart';
 import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task.dart';
 import 'package:todo/models/task_bucket.dart';
@@ -18,10 +20,15 @@ class TaskBucketPage extends StatelessWidget {
     return AppThemes.getThemeFromKey(style).primaryColor;
   } 
 
+  final TaskBucketModel taskBucket;
+
+  TaskBucketPage(this.taskBucket);
+
+  final BucketBloc bucketBloc = BucketBloc();
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<TaskBucketModel>(
-        builder: (_, taskBucket, __) => Scaffold(
+    return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             leading: IconButton(
@@ -40,7 +47,7 @@ class TaskBucketPage extends StatelessWidget {
                     height: 20,
                   ),
                   Expanded(
-                    child: generateTaskList([]),
+                    child: tasksSection(bucketBloc),
                   ),
                 ],
               ),
@@ -52,7 +59,17 @@ class TaskBucketPage extends StatelessWidget {
             child: Icon(Icons.add, color: Colors.white,),
             backgroundColor: primaryColor(taskBucket.style),
           ),
-    ),);
+    );
+  }
+
+  Widget tasksSection(BucketBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.tasks,
+      initialData: List<TaskModel>(),
+      builder: (context, snapshot) {
+        return generateTaskList(snapshot.data);
+      },
+    );
   }
 
   Widget generateTaskList(List<Task> tasks) {

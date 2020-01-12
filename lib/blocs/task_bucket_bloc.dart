@@ -4,14 +4,14 @@ import 'package:todo/models/task_bucket.dart';
 import 'package:todo/services/task_bucket_service.dart';
 import 'package:todo/utils/app_theme.dart';
 
-class TaskBucketBloc {
-  final _taskBucketPublisher = BehaviorSubject<List<TaskBucketModel>>();
+class HomeBloc {
+  final _taskBucketsStreamController = BehaviorSubject<List<TaskBucketModel>>();
   final _countStreamController = BehaviorSubject<int>();
 
   Stream<int> get showCount => _countStreamController.stream;
-  Stream<List<TaskBucketModel>> get taskBuckets => _taskBucketPublisher.stream;
+  Stream<List<TaskBucketModel>> get taskBuckets => _taskBucketsStreamController.stream;
 
-  TaskBucketBloc() {
+  HomeBloc() {
     TaskBucketDB().getDb();
     fetchData();
   }
@@ -19,7 +19,7 @@ class TaskBucketBloc {
   fetchData() {
     // var server = TaskBucketService();
     TaskBucketDB().fetchBuckets().then((buckets) {
-      _taskBucketPublisher.sink.add(buckets);
+      _taskBucketsStreamController.sink.add(buckets);
     });
   }
 
@@ -28,12 +28,38 @@ class TaskBucketBloc {
   }
 
   insert() {
-    var task = TaskBucketModel(id: 1, iconStr: "home", title: "asdfsadfsd", style: AppThemeStyle.home);
-    TaskBucketDB().insertTask(task).then(getCount());
+    // var task = TaskBucketModel(id: 1, iconStr: "home", title: "asdfsadfsd", style: AppThemeStyle.home);
+    // TaskBucketDB().insertTask(task).then(getCount());
   }
 
   dispose () {
-    _taskBucketPublisher.close();
+    _taskBucketsStreamController.close();
     _countStreamController.close();
+  }
+}
+
+class BucketBloc {
+
+  final _tasksStreamController = BehaviorSubject<List<TaskModel>>();
+
+  Stream<List<TaskModel>> get tasks => _tasksStreamController.stream;
+
+  Stream<int> get allTasksCount => tasks.map((tasks) => tasks.length);
+  Stream<double> get bucketProgress => tasks.map((tasks) {
+    final allCount = tasks.length;
+    if (allCount > 0) {
+      double finishedCount = tasks.where((task) => task.finished).length.toDouble();
+      return finishedCount / allCount.toDouble();
+    } else {
+      return 0;
+    }
+  });
+
+  void fetchTasks(int bucketId) {
+
+  }
+
+  dispose() {
+    _tasksStreamController.close();
   }
 }

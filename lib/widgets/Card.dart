@@ -58,7 +58,7 @@ class TaskCard extends StatelessWidget {
       // height: 200,
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, ScaleRoute(page: Provider<TaskBucketModel>(create: (_) => taskBucket, child: TaskBucketPage(),)));
+          Navigator.push(context, ScaleRoute(page: Provider<TaskBucketModel>(create: (_) => taskBucket, child: TaskBucketPage(taskBucket),)));
         },
         child: Card(
           margin: EdgeInsets.all(10),

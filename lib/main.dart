@@ -43,9 +43,9 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  final taskBucketBloc = TaskBucketBloc();
+  final taskBucketBloc = HomeBloc();
 
-  Widget userSection(TaskBucketBloc bloc) {
+  Widget userSection(HomeBloc bloc) {
     return StreamBuilder(
       stream: taskBucketBloc.showCount,
       initialData: 0,
