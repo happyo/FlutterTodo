@@ -81,8 +81,8 @@ class TaskBucketDB {
         "FOREIGN KEY(${TaskModel.dbBucketId}) REFERENCES ${TaskBucketModel.tblTaskBucket}(${TaskBucketModel.dbId}) ON DELETE CASCADE);");
   }
 
-  Future<List<TaskBucketModel>> testAll() async {
-    final List<Map<String, dynamic>> maps = await _database.query("buckets");
+  Future<List<TaskBucketModel>> fetchBuckets() async {
+    final List<Map<String, dynamic>> maps = await _database.query(TaskBucketModel.tblTaskBucket);
 
     return List.generate(maps.length, (i) {
       return TaskBucketModel.fromMap(maps[i]);
@@ -93,38 +93,34 @@ class TaskBucketDB {
     _database.insert("buckets", model.toMap());
   }
 
-  List<TaskBucket> _all = _initBuckets();
+  Future<int> fetchUnfinishedTasksCount() async {
+    var x = await _database.rawQuery("SELECT count(*) FROM ${TaskModel.tblTask} WHERE finished = 0;");
+    int count = Sqflite.firstIntValue(x);
+    return count;
+  }
 
-  int fetchTodoTasksCount() {
-    List<Task> allTasks = _all.map((bucket) => bucket.tasks).toList().fold([], (result, tasks) => result + tasks);
+  // List<TaskBucket> _all = _initBuckets();
+
+  // void createTask(Task task, Uuid bucketId) {
+  //   var bucket = _all.firstWhere((bucket) => bucket.id == bucketId);
+
+  //   if (bucket != null) {
+  //     bucket.tasks.add(task);
+  //   }
+  // }
+
+  // static List<TaskBucket> _initBuckets() {
+  //   TaskBucket taskBucket = TaskBucket(AppThemeStyle.home);
+  //   Task task1 = Task("asdfasdf");
+
+  //   TaskBucket taskBucket1 = TaskBucket(AppThemeStyle.work);
+  //   Task task2 = Task("asdfasdf");
+
+  //   taskBucket.tasks = [task1, task2];
+  //   taskBucket1.tasks = [task2];
     
-    return allTasks.where((task) => !task.finished).length;
-  }
-
-  List<TaskBucket> fetchBuckets() {
-    return _all;
-  }
-
-  void createTask(Task task, Uuid bucketId) {
-    var bucket = _all.firstWhere((bucket) => bucket.id == bucketId);
-
-    if (bucket != null) {
-      bucket.tasks.add(task);
-    }
-  }
-
-  static List<TaskBucket> _initBuckets() {
-    TaskBucket taskBucket = TaskBucket(AppThemeStyle.home);
-    Task task1 = Task("asdfasdf");
-
-    TaskBucket taskBucket1 = TaskBucket(AppThemeStyle.work);
-    Task task2 = Task("asdfasdf");
-
-    taskBucket.tasks = [task1, task2];
-    taskBucket1.tasks = [task2];
-    
-    return [taskBucket, taskBucket1];
-  }
+  //   return [taskBucket, taskBucket1];
+  // }
 }
 
 class TaskBucketModel {

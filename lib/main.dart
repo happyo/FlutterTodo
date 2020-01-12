@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
 import 'package:todo/blocs/task_bucket_bloc.dart';
@@ -9,6 +10,8 @@ import 'package:todo/utils/app_theme.dart';
 import 'package:todo/utils/color_helper.dart';
 import 'package:todo/widgets/Card.dart';
 import 'package:todo/widgets/user_info.dart';
+
+import 'database/task_bucket_db.dart';
 
 void main() {
   runApp(
@@ -53,9 +56,12 @@ class HomePage extends StatelessWidget {
   }
 
   Widget generateHaha() {
-    return StreamProvider<List<TaskBucket>>(
-      create: (_) => taskBucketBloc.taskBuckets,
-      child: CardList(),
+    return StreamBuilder(
+      stream: taskBucketBloc.taskBuckets,
+      initialData: List<TaskBucketModel>(),
+      builder: (context, snapshot) {
+        return CardList(snapshot.data);
+      },
     );
   }           
 
@@ -66,7 +72,7 @@ class HomePage extends StatelessWidget {
         leading: IconButton(
           icon: ImageIcon(AssetImage("images/menu.png"), color: Colors.white,),
           tooltip: 'Navigation menu',
-          onPressed: () => taskBucketBloc.getCount(),
+          onPressed: () => taskBucketBloc.fetchData(),
         ),
         title: Text('TODO', style: TextStyle(color: Colors.white),),
         actions: <Widget>[

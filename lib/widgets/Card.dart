@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
+import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task_bucket.dart';
 import 'package:todo/pages/task_bucket_page.dart';
 import 'package:todo/utils/app_theme.dart';
 import 'package:todo/utils/custom_router.dart';
 import 'package:todo/widgets/bucket_progress_bar.dart';
+import 'package:todo/widgets/card.dart';
 import 'package:todo/widgets/circle_boarder_icon.dart';
 
 class CardList extends StatelessWidget {
+  final List<TaskBucketModel> taskBuckets;
+
+  CardList(this.taskBuckets);
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<List<TaskBucket>>(builder: (_, taskBuckets, __) => Container(
-      height: 450.0,
-      child: generatePageView(taskBuckets, context),));
+    return Container(
+      height: 450,
+      child: generatePageView(taskBuckets, context),
+    );
   }
 
-  Widget generatePageView(List<TaskBucket> taskBuckets, BuildContext context) {
+  Widget generatePageView(List<TaskBucketModel> taskBuckets, BuildContext context) {
     return taskBuckets == null ? Container() : PageView(
         scrollDirection: Axis.horizontal,
         controller: PageController(
@@ -31,13 +39,16 @@ class CardList extends StatelessWidget {
     );
   }
 
-  List<Widget> generateCards(List<TaskBucket> taskBuckets) {
-    return taskBuckets.map((taskBucket) => TaskCard(taskBucket)).toList();
+  List<Widget> generateCards(List<TaskBucketModel> taskBuckets) {
+    var result = taskBuckets.map((taskBucket) { 
+      return TaskCard(taskBucket);
+    }).toList();
+    return result;
   }
 }
 
 class TaskCard extends StatelessWidget {
-  final TaskBucket taskBucket;
+  final TaskBucketModel taskBucket;
 
   TaskCard(this.taskBucket);
 
@@ -47,7 +58,7 @@ class TaskCard extends StatelessWidget {
       // height: 200,
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, ScaleRoute(page: Provider<TaskBucket>(create: (_) => taskBucket, child: TaskBucketPage(),)));
+          Navigator.push(context, ScaleRoute(page: Provider<TaskBucketModel>(create: (_) => taskBucket, child: TaskBucketPage(),)));
         },
         child: Card(
           margin: EdgeInsets.all(10),
@@ -75,12 +86,12 @@ class TaskCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("${taskBucket.tasks.length} Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
+                    Text("0 Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
                     SizedBox(height: 5,),
                     Text(AppThemes.getStringWithStyle(taskBucket.style), style: TextStyle(color: Colors.black, fontSize: 50),),
                     SizedBox(height: 10,),
                     Container(
-                      child: TasksProgressBar(AppThemes.getThemeFromKey(taskBucket.style).primaryColor, taskBucket.taskProgress()),
+                      child: TasksProgressBar(AppThemes.getThemeFromKey(taskBucket.style).primaryColor, 0.1),
                     ),
                   ],
                 ),

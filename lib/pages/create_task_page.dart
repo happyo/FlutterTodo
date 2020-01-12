@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 
 class CreateTaskPage extends StatelessWidget {
   final AppThemeStyle style;
-  final Uuid bucketId;
+  final int bucketId;
 
   CreateTaskPage(this.style, this.bucketId);
 

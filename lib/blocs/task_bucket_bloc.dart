@@ -5,11 +5,11 @@ import 'package:todo/services/task_bucket_service.dart';
 import 'package:todo/utils/app_theme.dart';
 
 class TaskBucketBloc {
-  final _taskBucketPublisher = PublishSubject<List<TaskBucket>>();
+  final _taskBucketPublisher = BehaviorSubject<List<TaskBucketModel>>();
   final _countStreamController = BehaviorSubject<int>();
 
   Stream<int> get showCount => _countStreamController.stream;
-  get taskBuckets => _taskBucketPublisher.stream;
+  Stream<List<TaskBucketModel>> get taskBuckets => _taskBucketPublisher.stream;
 
   TaskBucketBloc() {
     TaskBucketDB().getDb();
@@ -17,13 +17,14 @@ class TaskBucketBloc {
   }
 
   fetchData() {
-    var server = TaskBucketService();
-
-    _taskBucketPublisher.add(server.fetchBuckets());
+    // var server = TaskBucketService();
+    TaskBucketDB().fetchBuckets().then((buckets) {
+      _taskBucketPublisher.sink.add(buckets);
+    });
   }
 
   getCount() {
-     TaskBucketDB().testAll().then((result) => _countStreamController.sink.add(result.length));
+     TaskBucketDB().fetchUnfinishedTasksCount().then((result) => _countStreamController.sink.add(result));
   }
 
   insert() {

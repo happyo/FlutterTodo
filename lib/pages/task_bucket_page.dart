@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task.dart';
 import 'package:todo/models/task_bucket.dart';
 import 'package:todo/pages/create_task_page.dart';
@@ -19,7 +20,7 @@ class TaskBucketPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TaskBucket>(
+    return Consumer<TaskBucketModel>(
         builder: (_, taskBucket, __) => Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -39,7 +40,7 @@ class TaskBucketPage extends StatelessWidget {
                     height: 20,
                   ),
                   Expanded(
-                    child: generateTaskList(taskBucket.tasks),
+                    child: generateTaskList([]),
                   ),
                 ],
               ),
@@ -68,7 +69,7 @@ class TaskBucketPage extends StatelessWidget {
 }
 
 class CategorySurvey extends StatelessWidget {
-  final TaskBucket taskBucket;
+  final TaskBucketModel taskBucket;
 
   CategorySurvey(this.taskBucket);
 
@@ -81,11 +82,11 @@ class CategorySurvey extends StatelessWidget {
       children: <Widget>[
         CircleBorderIcon(AppThemes.getImageStrWithStyle(taskBucket.style), primaryColor),
         SizedBox(height: 10,),
-        Text("${taskBucket.tasks.length} Tasks", style: TextStyle(color: Colors.grey, fontSize: 20),),
+        Text("0 Tasks", style: TextStyle(color: Colors.grey, fontSize: 20),),
         SizedBox(height: 5,),
         Text(AppThemes.getStringWithStyle(taskBucket.style), style: TextStyle(color: hexToColor("#333333"), fontSize: 50),),
         SizedBox(height: 10,),
-        TasksProgressBar(primaryColor, taskBucket.taskProgress()),
+        TasksProgressBar(primaryColor, 0.1),
       ],
     );
   }

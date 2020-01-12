@@ -25,14 +25,14 @@ class TaskBloc {
     
   }
 
-  void submit(Uuid bucketId) {
+  void submit(int bucketId) {
     final content = _titleStreamController.value;
     final date = _dateStreamController.value;
 
     var task = Task(content);
     task.deadline = date;
 
-    TaskBucketDB().createTask(task, bucketId);
+    // TaskBucketDB().createTask(task, bucketId);
   }
 
   dispose() {
