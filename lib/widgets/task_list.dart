@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class TasksList extends StatelessWidget {
   final List<ListItem> items;
+  final Function(int taskId, bool selected) onSelect;
+  final Function(int taskId) onTap;
 
-  TasksList(this.items);
+  TasksList(this.items, { this.onSelect, this.onTap });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class TasksList extends StatelessWidget {
         if (item is HeadingItem) {
           return HeadingCell(item);
         } else if (item is MessageItem) {
-          return MessageCell(item);
+          return MessageCell(item, onSelect: (selected) => onSelect(item.taskId, selected), onTap: () => onTap(item.taskId),);
         } else {
           return Container();
         }
@@ -64,14 +66,17 @@ class MessageItem implements ListItem {
   final bool isSelected;
   final String detail;
   final bool hasClock;
+  final int taskId;
 
-  MessageItem(this.isSelected, this.detail, this.hasClock);
+  MessageItem(this.isSelected, this.detail, this.hasClock, this.taskId);
 }
 
 class MessageCell extends StatelessWidget {
   final MessageItem item;
+  final Function(bool selected) onSelect;
+  final Function onTap;
 
-  MessageCell(this.item);
+  MessageCell(this.item, {this.onSelect, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +84,15 @@ class MessageCell extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        SizedBox(
-          width: 20,
-          height: 20,
-          child: Image.asset(item.isSelected ? "images/selected.png" : "images/unselected.png"),
+        GestureDetector(
+          onTap: () { 
+            onSelect(!(item.isSelected));
+          },
+          child: SizedBox(
+            width: 20,
+            height: 20,
+            child: Image.asset(item.isSelected ? "images/selected.png" : "images/unselected.png"),
+          ),
         ),
         Expanded(
           child: Container(

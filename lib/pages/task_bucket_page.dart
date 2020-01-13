@@ -24,10 +24,10 @@ class TaskBucketPage extends StatelessWidget {
   final TaskBucketModel taskBucket;
 
   TaskBucketPage(this.taskBucket) {
-    bucketBloc.fetchTasks(taskBucket.id);
+    bucketBloc.fetchTasks();
   }
 
-  final BucketBloc bucketBloc = BucketBloc();
+  BucketBloc get bucketBloc => BucketBloc(taskBucket.id);
 
   @override
   Widget build(BuildContext context) {
@@ -77,21 +77,21 @@ class TaskBucketPage extends StatelessWidget {
       stream: bloc.tasks,
       initialData: List<TaskModel>(),
       builder: (context, snapshot) {
-        return generateTaskList(snapshot.data);
+        return generateTaskList(snapshot.data, bloc);
       },
     );
   }
 
-  Widget generateTaskList(List<TaskModel> tasks) {
+  Widget generateTaskList(List<TaskModel> tasks, BucketBloc bloc) {
     var map = groupBy(tasks, (task) => task.timeString());
     var items = List<ListItem>();
 
     map.forEach((key, value) {
       items.add(HeadingItem("$key"));
-      items.addAll(value.map((task) => MessageItem(task.finished, task.content, task.deadline != null)));
+      items.addAll(value.map((task) => MessageItem(task.finished, task.content, task.deadline != null, task.id)));
     });
 
-    return TasksList(items);
+    return TasksList(items, onSelect: (taskId, selected) => bloc.finishTask(taskId, selected),);
   }
 }
 

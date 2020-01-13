@@ -103,82 +103,12 @@ class TaskBucketDB {
   Future insertTask(TaskModel task) {
     return _database.insert(TaskModel.tblTask, task.toMap());
   }
-}
 
-class TaskBucketModel {
-  static final String tblTaskBucket = "buckets";
-  static final String dbId = "id";
-  static final String dbIconStr = "iconStr";
-  static final String dbTitle = "title";
-  static final String dbStyle = "style";
-
-  int id;
-  String iconStr;
-  String title;
-  AppThemeStyle style;
-
-  TaskBucketModel({this.id, this.iconStr, this.title, this.style});
-
-  Map<String, dynamic> toMap() {
-    return {
-      dbId: id,
-      dbTitle: title,
-      dbIconStr: iconStr,
-      dbStyle: style.index,
-    };
+  Future updateTask(TaskModel task) {
+    return _database.update(TaskModel.tblTask, task.toMap());
   }
 
-  TaskBucketModel.fromMap(Map<String, dynamic> map) {
-    id = map[dbId];
-    iconStr = map[dbIconStr];
-    title = map[dbTitle];
-    style = AppThemeStyle.values[map[dbStyle]];
-  }
-}
-
-class TaskModel {
-  static final String tblTask = "tasks";
-  static final String dbId = "id";
-  static final String dbContent = "content";
-  static final String dbDeadline = "deadline";
-  static final String dbFinished = "finished";
-  static final String dbBucketId = "bucketId";
-
-  int id;
-  String content;
-  DateTime deadline;
-  bool finished;
-  int bucketId;
-
-  TaskModel({this.id, this.content, this.deadline, this.finished = false, this.bucketId});
-
-  Map<String, dynamic> toMap() {
-    return {
-      dbId: id,
-      dbContent: content,
-      dbDeadline: deadline.millisecondsSinceEpoch,
-      dbFinished: finished,
-      dbBucketId: bucketId,
-    };
-  }
-
-  TaskModel.fromMap(Map<String, dynamic> map) {
-    id = map[dbId];
-    content = map[dbContent];
-    deadline = DateTime.fromMicrosecondsSinceEpoch(map[dbDeadline]);
-    finished = map[dbFinished] == null ? false : map[dbFinished] == 1;
-    bucketId = map[dbBucketId];
-  }
-
-  String timeString() {
-    var formatter = DateFormat('yyyy-MM-dd');
-
-    if (deadline != null) {
-      String formatted = formatter.format(deadline);
-
-      return formatted;
-    } else {
-      return "未限时";
-    }
+  Future finishTask(int taskId, bool selected) {
+    return _database.rawUpdate("UPDATE ${TaskModel.tblTask} SET finished = ? WHERE id = ?;", [selected ? 1 : 0, taskId]);
   }
 }

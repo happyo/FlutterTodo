@@ -22,8 +22,8 @@ class TaskBloc {
     return t.length > 0 && d != null;
   });
 
-  finishTask(Uuid taskId) {
-    
+  void updateTask(TaskModel task) {
+    TaskBucketDB().updateTask(task);
   }
 
   void submit(int bucketId) {

@@ -1,22 +1,32 @@
-import 'package:todo/models/task.dart';
 import 'package:todo/utils/app_theme.dart';
-import 'package:uuid/uuid.dart';
 
-// class TaskBucket {
-//   Uuid id;
-//   String title;
-//   String iconStr;
-//   List<Task> tasks = [];
-//   AppThemeStyle style;
+class TaskBucketModel {
+  static final String tblTaskBucket = "buckets";
+  static final String dbId = "id";
+  static final String dbIconStr = "iconStr";
+  static final String dbTitle = "title";
+  static final String dbStyle = "style";
 
-//   TaskBucket(this.style);
+  int id;
+  String iconStr;
+  String title;
+  AppThemeStyle style;
 
-//   double taskProgress() {
-//     final length = tasks.length;
-//     if (length > 0) {
-//       return tasks.where((task) => task.finished).toList().length / tasks.length;
-//     } else {
-//       return 0;
-//     }
-//   }
-// }
+  TaskBucketModel({this.id, this.iconStr, this.title, this.style});
+
+  Map<String, dynamic> toMap() {
+    return {
+      dbId: id,
+      dbTitle: title,
+      dbIconStr: iconStr,
+      dbStyle: style.index,
+    };
+  }
+
+  TaskBucketModel.fromMap(Map<String, dynamic> map) {
+    id = map[dbId];
+    iconStr = map[dbIconStr];
+    title = map[dbTitle];
+    style = AppThemeStyle.values[map[dbStyle]];
+  }
+}

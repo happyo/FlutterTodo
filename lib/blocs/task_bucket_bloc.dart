@@ -1,5 +1,6 @@
 import 'package:rxdart/subjects.dart';
 import 'package:todo/database/task_bucket_db.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/models/task_bucket.dart';
 import 'package:todo/services/task_bucket_service.dart';
 import 'package:todo/utils/app_theme.dart';
@@ -39,6 +40,10 @@ class HomeBloc {
 }
 
 class BucketBloc {
+  final int bucketId;
+  BucketBloc(this.bucketId) {
+    fetchTasks();
+  }
 
   final _tasksStreamController = BehaviorSubject<List<TaskModel>>();
 
@@ -55,8 +60,16 @@ class BucketBloc {
     }
   });
 
-  void fetchTasks(int bucketId) {
+  void fetchTasks() {
     TaskBucketDB().fetchTasks(bucketId).then((result) => _tasksStreamController.sink.add(result));
+  }
+
+  void updateTask(TaskModel task) {
+    TaskBucketDB().updateTask(task).then((_) => fetchTasks());
+  }
+
+  void finishTask(int taskId, bool selected) {
+    TaskBucketDB().finishTask(taskId, selected).then((_) => fetchTasks());
   }
 
   dispose() {
