@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:todo/models/task.dart';
@@ -83,8 +84,8 @@ class TaskBucketDB {
 
   Future<List<TaskBucketModel>> fetchBuckets() async {
     final List<Map<String, dynamic>> maps = await _database.query(TaskBucketModel.tblTaskBucket);
-
-    return maps.map((m) => TaskBucketModel.fromMap(m));
+    
+    return maps.map((m) => TaskBucketModel.fromMap(m)).toList();
   }
 
   Future<int> fetchUnfinishedTasksCount() async {
@@ -96,7 +97,7 @@ class TaskBucketDB {
   Future<List<TaskModel>> fetchTasks(int bucketId) async {
     final List<Map> maps = await _database.query(TaskModel.tblTask, where: "bucketId = ?", whereArgs: [bucketId]);
 
-    return maps.map((m) => TaskModel.fromMap(m));
+    return maps.map((m) => TaskModel.fromMap(m)).toList();
   }
 
   Future insertTask(TaskModel task) {
@@ -149,7 +150,7 @@ class TaskModel {
   bool finished;
   int bucketId;
 
-  TaskModel({this.id, this.content, this.deadline, this.finished, this.bucketId});
+  TaskModel({this.id, this.content, this.deadline, this.finished = false, this.bucketId});
 
   Map<String, dynamic> toMap() {
     return {
@@ -165,7 +166,19 @@ class TaskModel {
     id = map[dbId];
     content = map[dbContent];
     deadline = DateTime.fromMicrosecondsSinceEpoch(map[dbDeadline]);
-    finished = map[dbFinished];
+    finished = map[dbFinished] == null ? false : map[dbFinished] == 1;
     bucketId = map[dbBucketId];
+  }
+
+  String timeString() {
+    var formatter = DateFormat('yyyy-MM-dd');
+
+    if (deadline != null) {
+      String formatted = formatter.format(deadline);
+
+      return formatted;
+    } else {
+      return "未限时";
+    }
   }
 }

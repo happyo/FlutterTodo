@@ -56,7 +56,7 @@ class BucketBloc {
   });
 
   void fetchTasks(int bucketId) {
-
+    TaskBucketDB().fetchTasks(bucketId).then((result) => _tasksStreamController.sink.add(result));
   }
 
   dispose() {

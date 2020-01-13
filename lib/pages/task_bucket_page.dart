@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/blocs/task_bloc.dart';
 import 'package:todo/blocs/task_bucket_bloc.dart';
 import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task.dart';
@@ -22,7 +23,9 @@ class TaskBucketPage extends StatelessWidget {
 
   final TaskBucketModel taskBucket;
 
-  TaskBucketPage(this.taskBucket);
+  TaskBucketPage(this.taskBucket) {
+    bucketBloc.fetchTasks(taskBucket.id);
+  }
 
   final BucketBloc bucketBloc = BucketBloc();
 
@@ -42,7 +45,7 @@ class TaskBucketPage extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(50, 20, 50, 0),
               child: Column(
                 children: <Widget>[
-                  CategorySurvey(taskBucket),
+                  surveySection(bucketBloc),
                   SizedBox(
                     height: 20,
                   ),
@@ -62,6 +65,13 @@ class TaskBucketPage extends StatelessWidget {
     );
   }
 
+  Widget surveySection(BucketBloc bloc) {
+    return Provider(
+      create: (_) => bloc,
+      child: CategorySurvey(taskBucket),
+    );
+  }
+
   Widget tasksSection(BucketBloc bloc) {
     return StreamBuilder(
       stream: bloc.tasks,
@@ -72,7 +82,7 @@ class TaskBucketPage extends StatelessWidget {
     );
   }
 
-  Widget generateTaskList(List<Task> tasks) {
+  Widget generateTaskList(List<TaskModel> tasks) {
     var map = groupBy(tasks, (task) => task.timeString());
     var items = List<ListItem>();
 
@@ -94,17 +104,38 @@ class CategorySurvey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bucketBloc = Provider.of<BucketBloc>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         CircleBorderIcon(AppThemes.getImageStrWithStyle(taskBucket.style), primaryColor),
         SizedBox(height: 10,),
-        Text("0 Tasks", style: TextStyle(color: Colors.grey, fontSize: 20),),
+        tasksCountLabel(bucketBloc),
         SizedBox(height: 5,),
-        Text(AppThemes.getStringWithStyle(taskBucket.style), style: TextStyle(color: hexToColor("#333333"), fontSize: 50),),
+        Text(taskBucket.title, style: TextStyle(color: hexToColor("#333333"), fontSize: 50),),
         SizedBox(height: 10,),
-        TasksProgressBar(primaryColor, 0.1),
+        progressBar(bucketBloc),
       ],
+    );
+  }
+
+  Widget tasksCountLabel(BucketBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.allTasksCount,
+      initialData: 0,
+      builder: (context, snapshot) {
+        return Text("${snapshot.data} Tasks", style: TextStyle(color: Colors.grey, fontSize: 20),);
+      },
+    );
+  }
+
+  Widget progressBar(BucketBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.bucketProgress,
+      initialData: 0,
+      builder: (context, snapshot) {
+        return TasksProgressBar(primaryColor, snapshot.data);
+      },
     );
   }
 }
