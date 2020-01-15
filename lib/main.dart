@@ -4,8 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
+import 'package:todo/blocs/home_bloc.dart';
 import 'package:todo/blocs/task_bucket_bloc.dart';
 import 'package:todo/models/task_bucket.dart';
+import 'package:todo/pages/home_page.dart';
 import 'package:todo/utils/app_theme.dart';
 import 'package:todo/utils/color_helper.dart';
 import 'package:todo/widgets/Card.dart';
@@ -15,9 +17,21 @@ import 'database/task_bucket_db.dart';
 
 void main() {
   runApp(
-    Provider(
-      create: (_) => AppThemeBloc(),
-      dispose: (_, bloc) => bloc.dispose(),
+    MultiProvider(
+      providers: [
+        Provider<AppThemeBloc>(
+          create: (_) => AppThemeBloc(),
+          dispose: (_, bloc) => bloc.dispose(),
+        ),
+        Provider<HomeBloc>(
+          create: (_) { 
+            final homeBloc = HomeBloc();
+            TaskBucketDB().getDb().then((_) => homeBloc.fetchBuckets());
+            return homeBloc;
+          },
+          dispose: (_, bloc) => bloc.dispose(),
+        ),
+      ],
       child: MyApp(),
     )
   );
@@ -42,75 +56,5 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  final taskBucketBloc = HomeBloc();
 
-  Widget userSection(HomeBloc bloc) {
-    return StreamBuilder(
-      stream: taskBucketBloc.showCount,
-      initialData: 0,
-      builder: (context, snapshot) {
-        return UserInfo(snapshot.data);
-      },
-    );
-  }
-
-  Widget generateHaha() {
-    return StreamBuilder(
-      stream: taskBucketBloc.taskBuckets,
-      initialData: List<TaskBucketModel>(),
-      builder: (context, snapshot) {
-        return CardList(snapshot.data);
-      },
-    );
-  }           
-
-  Widget generateBar() {
-    return AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: ImageIcon(AssetImage("images/menu.png"), color: Colors.white,),
-          tooltip: 'Navigation menu',
-          onPressed: () => taskBucketBloc.fetchData(),
-        ),
-        title: Text('TODO', style: TextStyle(color: Colors.white),),
-        actions: <Widget>[
-          IconButton(
-            icon: ImageIcon(AssetImage("images/search.png"), color: Colors.white,),
-            tooltip: 'Search',
-            onPressed: () => taskBucketBloc.insert(),
-          ),
-        ],
-      );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Scaffold is a layout for the major Material Components.
-    return Scaffold(
-      appBar: generateBar(),
-      backgroundColor: Theme.of(context).primaryColor,
-      // body is the majority of the screen.
-      body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-          Container(
-            margin: EdgeInsets.fromLTRB(50, 50, 0, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                userSection(taskBucketBloc),
-                Container(
-                  margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
-                  child: Text(DateFormat().add_yMMMd().format(DateTime.now()), style: TextStyle(color: hexToColor("#FFFFFF"), fontSize: 15,),),
-                ),
-              ],),
-          ),
-          generateHaha(),
-      ],),)
-    );
-  }
-}
 

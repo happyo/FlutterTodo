@@ -5,40 +5,6 @@ import 'package:todo/models/task_bucket.dart';
 import 'package:todo/services/task_bucket_service.dart';
 import 'package:todo/utils/app_theme.dart';
 
-class HomeBloc {
-  final _taskBucketsStreamController = BehaviorSubject<List<TaskBucketModel>>();
-  final _countStreamController = BehaviorSubject<int>();
-
-  Stream<int> get showCount => _countStreamController.stream;
-  Stream<List<TaskBucketModel>> get taskBuckets => _taskBucketsStreamController.stream;
-
-  HomeBloc() {
-    TaskBucketDB().getDb();
-    fetchData();
-  }
-
-  fetchData() {
-    // var server = TaskBucketService();
-    TaskBucketDB().fetchBuckets().then((buckets) {
-      _taskBucketsStreamController.sink.add(buckets);
-    });
-  }
-
-  getCount() {
-     TaskBucketDB().fetchUnfinishedTasksCount().then((result) => _countStreamController.sink.add(result));
-  }
-
-  insert() {
-    // var task = TaskBucketModel(id: 1, iconStr: "home", title: "asdfsadfsd", style: AppThemeStyle.home);
-    // TaskBucketDB().insertTask(task).then(getCount());
-  }
-
-  dispose () {
-    _taskBucketsStreamController.close();
-    _countStreamController.close();
-  }
-}
-
 class BucketBloc {
   final int bucketId;
   BucketBloc(this.bucketId) {
