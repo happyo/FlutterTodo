@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/blocs/home_bloc.dart';
 import 'package:todo/blocs/task_bloc.dart';
 import 'package:todo/blocs/task_bucket_bloc.dart';
 import 'package:todo/database/task_bucket_db.dart';
@@ -23,9 +24,7 @@ class TaskBucketPage extends StatelessWidget {
 
   final TaskBucketModel taskBucket;
 
-  TaskBucketPage(this.taskBucket) {
-    // bucketBloc.fetchTasks();
-  }
+  TaskBucketPage(this.taskBucket);
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +55,11 @@ class TaskBucketPage extends StatelessWidget {
               ),
             ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).push(FadeRoute(page: CreateTaskPage(taskBucket.style, taskBucket.id)));
+            onPressed: () async {
+              await Navigator.of(context).push(FadeRoute(page: CreateTaskPage(taskBucket.style, taskBucket.id)));
+              bucketBloc.fetchTasks();
+              final homeBloc = Provider.of<HomeBloc>(context);
+              homeBloc.fetchUnfinishedTasksCount();
             },
             child: Icon(Icons.add, color: Colors.white,),
             backgroundColor: primaryColor(taskBucket.style),
@@ -66,10 +68,11 @@ class TaskBucketPage extends StatelessWidget {
   }
 
   Widget surveySection(BucketBloc bloc) {
-    return Provider(
-      create: (_) => bloc,
-      child: CategorySurvey(taskBucket),
-    );
+    // return Provider(
+    //   create: (_) => bloc,
+    //   child: CategorySurvey(taskBucket),
+    // );
+    return CategorySurvey(taskBucket);
   }
 
   Widget tasksSection(BucketBloc bloc) {
@@ -132,7 +135,7 @@ class CategorySurvey extends StatelessWidget {
   Widget progressBar(BucketBloc bloc) {
     return StreamBuilder(
       stream: bloc.bucketProgress,
-      initialData: 0,
+      initialData: 0.0,
       builder: (context, snapshot) {
         return TasksProgressBar(primaryColor, snapshot.data);
       },

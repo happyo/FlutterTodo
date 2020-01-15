@@ -66,7 +66,10 @@ class TaskCard extends StatelessWidget {
       // height: 200,
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, ScaleRoute(page: Provider<TaskBucketModel>(create: (_) => taskBucket, child: TaskBucketPage(taskBucket),)));
+          Navigator.push(context, ScaleRoute(page: Provider(
+            create: (_) => bucketBloc,
+            child: TaskBucketPage(taskBucket),
+          )));
         },
         child: Card(
           margin: EdgeInsets.all(10),
@@ -122,7 +125,7 @@ class TaskCard extends StatelessWidget {
   Widget progressBar(BucketBloc bloc) {
     return StreamBuilder(
       stream: bloc.bucketProgress,
-      initialData: 0,
+      initialData: 0.0,
       builder: (context, snapshot) {
         return Container(
           child: TasksProgressBar(AppThemes.getThemeFromKey(taskBucket.style).primaryColor, snapshot.data),
