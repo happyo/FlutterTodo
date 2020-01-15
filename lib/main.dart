@@ -26,7 +26,10 @@ void main() {
         Provider<HomeBloc>(
           create: (_) { 
             final homeBloc = HomeBloc();
-            TaskBucketDB().getDb().then((_) => homeBloc.fetchBuckets());
+            TaskBucketDB().getDb().then((_) { 
+              homeBloc.fetchBuckets();
+              homeBloc.fetchUnfinishedTasksCount();
+            });
             return homeBloc;
           },
           dispose: (_, bloc) => bloc.dispose(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
+import 'package:todo/blocs/task_bucket_bloc.dart';
 import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task_bucket.dart';
 import 'package:todo/pages/task_bucket_page.dart';
@@ -20,11 +21,11 @@ class CardList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 450,
-      child: generatePageView(taskBuckets, context),
+      child: cardPageView(taskBuckets, context),
     );
   }
 
-  Widget generatePageView(List<TaskBucketModel> taskBuckets, BuildContext context) {
+  Widget cardPageView(List<TaskBucketModel> taskBuckets, BuildContext context) {
     return taskBuckets == null ? Container() : PageView(
         scrollDirection: Axis.horizontal,
         controller: PageController(
@@ -32,16 +33,21 @@ class CardList extends StatelessWidget {
             viewportFraction: 0.8,
           ),
         // children: generateCards(taskBuckets),
-        children: generateCards(taskBuckets),
+        children: cards(taskBuckets),
         onPageChanged: (value) {
           Provider.of<AppThemeBloc>(context).changeStyle(taskBuckets[value].style);
         },
     );
   }
 
-  List<Widget> generateCards(List<TaskBucketModel> taskBuckets) {
+  List<Widget> cards(List<TaskBucketModel> taskBuckets) {
     var result = taskBuckets.map((taskBucket) { 
-      return TaskCard(taskBucket);
+      return Provider(
+        create: (_) => BucketBloc(taskBucket.id),
+        dispose: (_, bloc) => bloc.dispose,
+        child: TaskCard(taskBucket),
+      );
+      // return TaskCard(taskBucket);
     }).toList();
     return result;
   }
@@ -54,6 +60,8 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bucketBloc = Provider.of<BucketBloc>(context);
+
     return SizedBox(
       // height: 200,
       child: GestureDetector(
@@ -86,13 +94,11 @@ class TaskCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("0 Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),),
+                    countLabel(bucketBloc),
                     SizedBox(height: 5,),
                     Text(AppThemes.getStringWithStyle(taskBucket.style), style: TextStyle(color: Colors.black, fontSize: 50),),
                     SizedBox(height: 10,),
-                    Container(
-                      child: TasksProgressBar(AppThemes.getThemeFromKey(taskBucket.style).primaryColor, 0.1),
-                    ),
+                    progressBar(bucketBloc),
                   ],
                 ),
               ],
@@ -101,5 +107,27 @@ class TaskCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget countLabel(BucketBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.allTasksCount,
+      initialData: 0,
+      builder: (context, snapshot) {
+        return Text("${snapshot.data} Tasks", style: TextStyle(color: Colors.grey, fontSize: 25),);
+      },
+    );
+  }
+
+  Widget progressBar(BucketBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.bucketProgress,
+      initialData: 0,
+      builder: (context, snapshot) {
+        return Container(
+          child: TasksProgressBar(AppThemes.getThemeFromKey(taskBucket.style).primaryColor, snapshot.data),
+        );
+      },
+    ); 
   }
 }

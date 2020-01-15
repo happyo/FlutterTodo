@@ -24,13 +24,13 @@ class TaskBucketPage extends StatelessWidget {
   final TaskBucketModel taskBucket;
 
   TaskBucketPage(this.taskBucket) {
-    bucketBloc.fetchTasks();
+    // bucketBloc.fetchTasks();
   }
-
-  BucketBloc get bucketBloc => BucketBloc(taskBucket.id);
 
   @override
   Widget build(BuildContext context) {
+    final bucketBloc = Provider.of<BucketBloc>(context);
+
     return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,

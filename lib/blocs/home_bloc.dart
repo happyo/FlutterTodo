@@ -17,7 +17,7 @@ class HomeBloc {
     });
   }
 
-  getCount() {
+  fetchUnfinishedTasksCount() {
      TaskBucketDB().fetchUnfinishedTasksCount().then((result) => _countStreamController.sink.add(result));
   }
 
