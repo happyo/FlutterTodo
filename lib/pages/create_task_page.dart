@@ -20,10 +20,11 @@ class CreateTaskPage extends StatelessWidget {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate: DateTime(2016, 8),
+      initialDate: DateTime.now(),
       firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101),
+      lastDate: DateTime(2050),
     );
+
     if (picked != null) 
       bloc.changeDate(picked);
   }

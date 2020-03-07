@@ -29,7 +29,7 @@ class TaskModel {
   TaskModel.fromMap(Map<String, dynamic> map) {
     id = map[dbId];
     content = map[dbContent];
-    deadline = DateTime.fromMicrosecondsSinceEpoch(map[dbDeadline]);
+    deadline = DateTime.fromMillisecondsSinceEpoch(map[dbDeadline]);
     finished = map[dbFinished] == null ? false : map[dbFinished] == 1;
     bucketId = map[dbBucketId];
   }
