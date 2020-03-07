@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
+import 'package:todo/blocs/home_bloc.dart';
 import 'package:todo/blocs/task_bucket_bloc.dart';
 import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task_bucket.dart';
@@ -65,11 +66,14 @@ class TaskCard extends StatelessWidget {
     return SizedBox(
       // height: 200,
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(context, ScaleRoute(page: Provider(
+        onTap: () async {
+          await Navigator.push(context, ScaleRoute(page: Provider(
             create: (_) => bucketBloc,
             child: TaskBucketPage(taskBucket),
           )));
+
+          final homeBloc = Provider.of<HomeBloc>(context);
+          homeBloc.fetchUnfinishedTasksCount();
         },
         child: Card(
           margin: EdgeInsets.all(10),

@@ -58,8 +58,6 @@ class TaskBucketPage extends StatelessWidget {
             onPressed: () async {
               await Navigator.of(context).push(FadeRoute(page: CreateTaskPage(taskBucket.style, taskBucket.id)));
               bucketBloc.fetchTasks();
-              final homeBloc = Provider.of<HomeBloc>(context);
-              homeBloc.fetchUnfinishedTasksCount();
             },
             child: Icon(Icons.add, color: Colors.white,),
             backgroundColor: primaryColor(taskBucket.style),
@@ -68,10 +66,6 @@ class TaskBucketPage extends StatelessWidget {
   }
 
   Widget surveySection(BucketBloc bloc) {
-    // return Provider(
-    //   create: (_) => bloc,
-    //   child: CategorySurvey(taskBucket),
-    // );
     return CategorySurvey(taskBucket);
   }
 
