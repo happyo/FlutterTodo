@@ -1,10 +1,8 @@
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task.dart';
-import 'package:uuid/uuid.dart';
 
 class TaskBloc {
   final _titleStreamController = BehaviorSubject<String>();

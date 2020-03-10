@@ -1,9 +1,6 @@
 import 'package:rxdart/subjects.dart';
 import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task.dart';
-import 'package:todo/models/task_bucket.dart';
-import 'package:todo/services/task_bucket_service.dart';
-import 'package:todo/utils/app_theme.dart';
 
 class BucketBloc {
   final int bucketId;

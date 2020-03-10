@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/blocs/app_theme_bloc.dart';
 import 'package:todo/blocs/home_bloc.dart';
 import 'package:todo/blocs/task_bucket_bloc.dart';
-import 'package:todo/database/task_bucket_db.dart';
 import 'package:todo/models/task_bucket.dart';
 import 'package:todo/pages/task_bucket_page.dart';
 import 'package:todo/utils/app_theme.dart';
 import 'package:todo/utils/custom_router.dart';
 import 'package:todo/widgets/bucket_progress_bar.dart';
-import 'package:todo/widgets/card.dart';
 import 'package:todo/widgets/circle_boarder_icon.dart';
 
 class CardList extends StatelessWidget {
