@@ -94,7 +94,12 @@ class TaskBucketDB {
   Future<List<TaskModel>> fetchTasks(int bucketId) async {
     final List<Map> maps = await _database.query(TaskModel.tblTask, where: "bucketId = ?", whereArgs: [bucketId]);
 
-    return maps.map((m) => TaskModel.fromMap(m)).toList();
+    var list = maps.map((m) => TaskModel.fromMap(m)).toList();
+    list.sort((a, b) {
+      return a.deadline.compareTo(b.deadline);
+    });
+
+    return list;
   }
 
   Future insertTask(TaskModel task) {
